@@ -1,4 +1,4 @@
-# Email Countdown Timer
+# Email Countdown Timer + fixed 0 alignment problem
 
 > Create an animated countdown timer for use within HTML emails
 
