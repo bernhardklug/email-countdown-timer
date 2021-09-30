@@ -147,12 +147,14 @@ class CountdownTimer
     $this->date['futureDate'] = new DateTime(date('r', strtotime($settings['time'])));
     $this->date['timeNow'] = time();
     $this->date['now'] = new DateTime(date('r', time()));
+   
 
     // create new images
     $this->box = imagecreatetruecolor($this->width, $this->height);
     $this->base = imagecreatetruecolor($this->width, $this->height);
 
     $this->fontSettings['path'] = $this->fontPath . $settings['font'] . '.ttf';
+    $this->fontSettings['path2'] = $this->fontPath . $settings['font2'] . '.ttf';
     $this->fontSettings['color'] = imagecolorallocate($this->box, $this->fontColor[0], $this->fontColor[1], $this->fontColor[2]);
     $this->fontSettings['size'] = $settings['fontSize'];
     $this->fontSettings['characterWidth'] = imagefontwidth($this->fontSettings['path']);
@@ -226,19 +228,27 @@ class CountdownTimer
       $date['now']
     );
 
-    if ($date['futureDate'] < $date['now']) {
-      $text = $interval->format('00:00:00:00');
+    if ( $date['futureDate'] < $date['now'] ) {
+      $text = $interval->format('');
       $this->loops = 1;
-    } else {
-      $text = $interval->format('0%a:%H:%I:%S');
+     } else {
+      if ($interval->d < 10 && $interval->m == 0) {
+        $text = $interval->format('0%a %H %I %S');
+      } else {
+        $text = $interval->format('%a %H %I %S');
+      }
       $this->loops = 0;
     }
 
-    $labels = array('Days', 'Hrs', 'Mins', 'Secs');
+  
+
+
+
+    $labels = array('days', 'hours', 'mins', '');
 
     // apply the labels to the image $this->yOffset + ($this->characterHeight * 0.8)
     foreach ($labels as $key => $label) {
-      imagettftext($image, 15, 0, $this->xOffset + ($this->characterWidth * $this->labelOffsets[$key]), 98, $font['color'], $font['path'], $label);
+      imagettftext($image, 15, 0, $this->xOffset + ($this->characterWidth * $this->labelOffsets[$key]), 98, $font['color'], $font['path2'], $label);
     }
 
     // apply time to new image
@@ -272,15 +282,17 @@ class CountdownTimer
  */
 new CountdownTimer(array(
   'time' => $_GET['time'],
-  'width' => isset($_GET['width']) ? $_GET['width'] : 640,
+  'width' => isset($_GET['width']) ? $_GET['width'] : 290,
   'height' => isset($_GET['height']) ? $_GET['height'] : 110,
-  'boxColor' => isset($_GET['boxColor']) ? $_GET['boxColor'] : '#000',
-  'font' => isset($_GET['font']) ? $_GET['font'] : 'BebasNeue',
-  'fontColor' => isset($_GET['fontColor']) ? $_GET['fontColor'] : '#fff',
-  'fontSize' => isset($_GET['fontSize']) ? $_GET['fontSize'] : 60,
-  'xOffset' => isset($_GET['xOffset']) ? $_GET['xOffset'] : 155,
+  'boxColor' => isset($_GET['boxColor']) ? $_GET['boxColor'] : '#F1F3F2',
+  'font' => isset($_GET['font']) ? $_GET['font'] : 'Roboto-Medium',
+  'font2' => isset($_GET['font2']) ? $_GET['font2'] : 'Lora-Regular',
+
+  'fontColor' => isset($_GET['fontColor']) ? $_GET['fontColor'] : '#000',
+  'fontSize' => isset($_GET['fontSize']) ? $_GET['fontSize'] : 50,
+  'xOffset' => isset($_GET['xOffset']) ? $_GET['xOffset'] : 15,
   'yOffset' => isset($_GET['yOffset']) ? $_GET['yOffset'] : 70,
-  'labelOffsets' => isset($_GET['labelOffsets']) ? $_GET['labelOffsets'] : "1.4,5,8,11",
+  'labelOffsets' => isset($_GET['labelOffsets']) ? $_GET['labelOffsets'] : "0.4,2.6,5.2,11",
 ));
 
 // http://[server-address]/countdown.php?time=2016-12-25+00:00:01&width=640&height=110&boxColor=8B2860&font=BebasNeue&fontColor=FBB92C&fontSize=60&xOffset=155&yOffset=70&labelOffsets=1.4,5,8,11
