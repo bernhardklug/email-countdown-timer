@@ -4,6 +4,7 @@
 
 ## Getting started
 - Upload files to server
+- change the file name to index.php if you don't want to use countdown.php/... than you can use a subdomain /
 
 ## Usage
 - Navigate to your script in the browser and append the time you want to countdown to in the querystring parameter `time`. e.g. `http://[server-address]/countdown.php?time=2016-12-25+00:00:01`.
